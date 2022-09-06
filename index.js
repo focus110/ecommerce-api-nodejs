@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const user = require("./routes/users");
+const auth = require("./routes/auth");
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ mongoose
 app.use(express.json());
 
 app.use("/api/user", user);
+app.use("/api/auth", auth);
 
 app.listen(process.env.PORT || 5000, () => {
   console.log("Server is running!");
