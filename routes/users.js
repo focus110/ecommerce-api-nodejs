@@ -22,9 +22,8 @@ router.put("/:id", authAndCheck, async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json();
+    res.status(200).json(updateUser);
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 });
