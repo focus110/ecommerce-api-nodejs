@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const CryptoJS = require("crypto-js");
-const { authAndCheck } = require("../middleware/auth");
+const { authAndCheck, authAndAdmin } = require("../middleware/auth");
 
 const User = require("../models/User");
 
@@ -25,6 +25,21 @@ router.put("/:id", authAndCheck, async (req, res) => {
     res.status(200).json(updateUser);
   } catch (error) {
     res.status(500).json(error);
+  }
+});
+
+// delete
+
+router.delete("/:id", authAndAdmin, async (req, res) => {
+  const id_ = req.params.id;
+
+  try {
+    const user = await User.findByIdAndDelete(id_);
+    const { password, ...others } = user._doc;
+
+    res.status(200).json(others);
+  } catch (error) {
+    res.status(500).json(err);
   }
 });
 
