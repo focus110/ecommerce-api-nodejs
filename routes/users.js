@@ -29,7 +29,6 @@ router.put("/:id", authAndCheck, async (req, res) => {
 });
 
 // delete
-
 router.delete("/:id", authAndAdmin, async (req, res) => {
   const id_ = req.params.id;
 
@@ -39,7 +38,20 @@ router.delete("/:id", authAndAdmin, async (req, res) => {
 
     res.status(200).json(others);
   } catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
+  }
+});
+
+router.get("/", authAndAdmin, async (req, res) => {
+  const query = req.query.new;
+
+  try {
+    const users = query
+      ? await User.find().sort({ _id: 1 }).limit(1)
+      : await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
   }
 });
 
