@@ -59,7 +59,22 @@ router.get("/stats", authAndAdmin, async (req, res) => {
   const date = new Date();
   const lastYear = new Date(date.setFullYear(date.setFullYear() - 1));
   try {
-    const data = await User.aggregate([{ $match: createdAt }]);
+    const data = await User.aggregate([
+      { $match: { createdAt: { $gte: lastYear } } },
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+        },
+      },
+      {
+        $group: {
+          _id: "$month",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.status(200).json(data);
   } catch (error) {
     res.send(500).json(error);
   }
