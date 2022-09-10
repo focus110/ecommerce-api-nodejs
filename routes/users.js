@@ -55,4 +55,14 @@ router.get("/", authAndAdmin, async (req, res) => {
   }
 });
 
+router.get("/stats", authAndAdmin, async (req, res) => {
+  const date = new Date();
+  const lastYear = new Date(date.setFullYear(date.setFullYear() - 1));
+  try {
+    const data = await User.aggregate([{ $match: createdAt }]);
+  } catch (error) {
+    res.send(500).json(error);
+  }
+});
+
 module.exports = router;
